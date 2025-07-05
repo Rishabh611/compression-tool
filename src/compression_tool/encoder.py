@@ -8,7 +8,7 @@ class Encoder:
     def __init__(self):
         pass
 
-    def read_input(self, file_path: str) -> str:
+    def _read_input(self, file_path: str) -> str:
         with open(file_path, "r") as file:
             return file.read()
 
@@ -32,11 +32,17 @@ class Encoder:
         return huffman_tree
         
     def _get_prefix_code_table(self, file_content) -> dict[str, str]:
+        '''
+        from the file contents generate the prefix code table
+        '''
         frequency_map = self._get_frequency_map(file_content)
         huffman_tree = self._get_huffman_tree(frequency_map)
         return huffman_tree.get_prefix_code_table()
 
     def _get_encoded_string(self, file_content):
+        '''
+        From the file contents generate the encoded file string
+        '''
         prefix_code_table = self._get_prefix_code_table(file_content)
 
         encoded_string = ""
@@ -52,11 +58,14 @@ class Encoder:
         return int(encoded_string, 2)
 
     def encode(self, file_path: str, output_file_path: str):
-        file_contents = self.read_input(file_path)
+        '''
+        Encode the file contents and store it in another file
+        '''
+        file_contents = self._read_input(file_path)
 
         encoded_contents = self._get_encoded_string(self, file_contents)
 
-        if not out_file_path:
+        if not output_file_path:
             out_file_path = file_path + ".huff"
 
         with open(out_file_path, "w") as file:

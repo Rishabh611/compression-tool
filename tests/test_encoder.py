@@ -1,4 +1,6 @@
+import tempfile
 from compression_tool.encoder import Encoder
+
 
 def test_get_frequency_map():
     encoder = Encoder()
@@ -11,7 +13,7 @@ def test_get_frequency_map():
 def test_huffman_tree():
     encoder = Encoder()
 
-    frequency_map = encoder.get_frequency_map("abc")
+    frequency_map = encoder._get_frequency_map("abc")
 
     huffman_tree = encoder._get_huffman_tree(frequency_map)
 
@@ -29,6 +31,10 @@ def test_huffman_tree():
 def test_encoded_string():
     encoder = Encoder()
 
-    encoded_string = encoder.encode("tests/test1.txt", prefix_code_table)
+    with tempfile.NamedTemporaryFile(mode="w+t") as tmpfile:
+        encoded_string = encoder.encode("tests/test1.txt", tmpfile.name)
+        tmpfile.seek(0)
+        content = tmpfile.read()
+        print(content)
 
     assert encoded_string == 0
